@@ -1,0 +1,589 @@
+/* ============================================================
+   PAGE
+   ============================================================ */
+.authPage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, #071a2f, #0b57a4);
+  position: relative;
+  overflow: hidden;
+}
+
+.authPage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(
+      circle at 15% 20%,
+      rgba(47, 139, 255, 0.08) 0%,
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 85% 80%,
+      rgba(11, 87, 164, 0.12) 0%,
+      transparent 50%
+    ),
+    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    100% 100%,
+    60px 60px,
+    60px 60px;
+  pointer-events: none;
+}
+
+/* ============================================================
+   CARD
+   ============================================================ */
+.authCard {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  max-width: 1150px;
+  min-height: 640px;
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: #0d1b2a;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 25px 60px -15px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(47, 139, 255, 0.04);
+  animation: cardFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   LEFT VISUAL PANEL
+   ============================================================ */
+.visualPanel {
+  position: relative;
+  flex: 0 0 45%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2.25rem;
+  overflow: hidden;
+  background-color: #0a2540;
+}
+
+.visualPanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/senatebuilding.jpeg");
+  background-size: cover;
+  background-position: contain;
+  background-repeat: no-repeat;
+  filter: brightness(0.45) saturate(0.7);
+}
+.visualOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    160deg,
+    rgba(7, 26, 47, 0.95) 0%,
+    rgba(10, 37, 64, 0.82) 50%,
+    rgba(11, 87, 164, 0.55) 100%
+  );
+}
+
+.visualOverlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 30% 70%,
+    rgba(47, 139, 255, 0.18) 0%,
+    transparent 60%
+  );
+}
+
+.visualContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.visualTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #f5f8fc;
+}
+
+.brandMark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #071a2f, #0b57a4);
+  border: 1px solid rgba(47, 139, 255, 0.4);
+  box-shadow: 0 0 20px rgba(47, 139, 255, 0.2);
+  flex-shrink: 0;
+}
+
+.secureBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(47, 139, 255, 0.12);
+  border: 1px solid rgba(47, 139, 255, 0.3);
+  color: #2f8bff;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.visualBottom {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.visualHeading {
+  font-size: 1.65rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #f5f8fc;
+  margin: 0;
+}
+
+.visualDescription {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: rgba(245, 248, 252, 0.72);
+  margin: 0;
+  max-width: 38ch;
+}
+
+.visualLine {
+  height: 1px;
+  width: 64px;
+  background: linear-gradient(90deg, #2f8bff, transparent);
+  margin-top: 0.25rem;
+}
+
+/* ============================================================
+   RIGHT FORM PANEL
+   ============================================================ */
+.formPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem 3.25rem;
+  background-color: #0d1b2a;
+  overflow-y: auto;
+}
+
+.formHeader {
+  margin-bottom: 1.75rem;
+}
+
+.formTitle {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #f5f8fc;
+  margin: 0 0 0.4rem;
+}
+
+.formSubtitle {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  animation: formSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+
+@keyframes formSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.inputLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #f5f8fc;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 0.85rem;
+  color: #94a3b8;
+  pointer-events: none;
+  transition: color 0.2s ease;
+  z-index: 1;
+}
+
+.input {
+  width: 100%;
+  padding: 0.7rem 0.9rem 0.7rem 2.75rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: rgba(255, 255, 255, 0.035);
+  color: #f5f8fc;
+  font-size: 0.9rem;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    background-color 0.2s;
+  outline: none;
+}
+
+.input::placeholder {
+  color: rgba(148, 163, 184, 0.7);
+}
+
+.input:hover {
+  border-color: rgba(47, 139, 255, 0.35);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.input:focus {
+  border-color: #2f8bff;
+  background-color: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 0 3px rgba(47, 139, 255, 0.12);
+}
+
+.inputWrapper:focus-within .inputIcon {
+  color: #2f8bff;
+}
+
+.inputError {
+  border-color: #ef4444 !important;
+}
+
+.inputError:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+}
+
+.errorMessage {
+  font-size: 0.75rem;
+  color: #f87171;
+  margin: 0;
+}
+
+.passwordToggle {
+  position: absolute;
+  right: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 6px;
+  transition:
+    color 0.2s,
+    background-color 0.2s;
+}
+
+.passwordToggle:hover {
+  color: #2f8bff;
+  background-color: rgba(47, 139, 255, 0.08);
+}
+
+.passwordToggle:focus-visible {
+  outline: 2px solid #2f8bff;
+  outline-offset: 1px;
+}
+
+.formOptions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.rememberLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: #94a3b8;
+  cursor: pointer;
+  user-select: none;
+}
+
+.rememberLabel input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #0b57a4;
+  cursor: pointer;
+}
+
+.forgotLink {
+  font-size: 0.82rem;
+  color: #2f8bff;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.forgotLink:hover {
+  color: #1473d6;
+  text-decoration: underline;
+}
+
+.primaryButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.78rem 1rem;
+  margin-top: 0.35rem;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0b57a4, #1473d6);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.15s,
+    box-shadow 0.2s,
+    opacity 0.2s;
+  box-shadow: 0 4px 14px rgba(11, 87, 164, 0.35);
+}
+
+.primaryButton:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(11, 87, 164, 0.45);
+}
+
+.primaryButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.primaryButton:focus-visible {
+  outline: 2px solid #2f8bff;
+  outline-offset: 2px;
+}
+
+.primaryButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.dividerRow {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin: 0.5rem 0;
+}
+
+.dividerRow::before,
+.dividerRow::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.dividerText {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.socialButtons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.socialButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.62rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: rgba(255, 255, 255, 0.03);
+  color: #f5f8fc;
+  font-size: 0.84rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    transform 0.15s;
+}
+
+.socialButton:hover {
+  background-color: rgba(255, 255, 255, 0.07);
+  border-color: rgba(47, 139, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+.socialButton:focus-visible {
+  outline: 2px solid #2f8bff;
+  outline-offset: 2px;
+}
+
+.authFooter {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+.authFooter a {
+  color: #2f8bff;
+  font-weight: 600;
+  margin-left: 0.3rem;
+}
+
+.authFooter a:hover {
+  color: #1473d6;
+  text-decoration: underline;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1024px) {
+  .visualPanel {
+    flex: 0 0 42%;
+    padding: 2rem 1.75rem;
+  }
+  .visualHeading {
+    font-size: 1.4rem;
+  }
+  .formPanel {
+    padding: 2.5rem 2.25rem;
+  }
+}
+
+@media (max-width: 860px) {
+  .authCard {
+    flex-direction: column;
+    max-width: 560px;
+    min-height: auto;
+  }
+  .visualPanel {
+    display: none;
+  }
+  .formPanel {
+    padding: 2.5rem 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .authPage {
+    padding: 0;
+    align-items: stretch;
+  }
+  .authCard {
+    border-radius: 0;
+    border: none;
+    max-width: 100%;
+    min-height: 100vh;
+    box-shadow: none;
+  }
+  .visualPanel {
+    display: none;
+  }
+  .formPanel {
+    padding: 2rem 1.25rem;
+    min-height: 100vh;
+    justify-content: center;
+  }
+  .formTitle {
+    font-size: 1.45rem;
+  }
+  .socialButtons {
+    grid-template-columns: 1fr;
+  }
+  .formOptions {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 380px) {
+  .formPanel {
+    padding: 1.5rem 1rem;
+  }
+  .input {
+    font-size: 0.85rem;
+  }
+}
