@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Grid from "../grid/page";
 import Delegation from "../delegation/page";
-import Banner from "../(component)/banner/page";
+import Banner from "../(component)/banner/welcome-banner";
 import { createClient } from "../../supabase/client";
 
 export default function Page() {
