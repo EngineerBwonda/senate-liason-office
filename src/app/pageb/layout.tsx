@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type ReactNode,
+} from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fraunces, Inter } from "next/font/google";
@@ -30,6 +36,7 @@ import {
 } from "lucide-react";
 import OnlineUsers from "./(component)/online-users/online-users";
 import RecentMessages from "./(component)/recent-messages/recent-messages";
+import { createClient } from "../supabase/client";
 import styles from "./styles.module.css";
 
 const display = Fraunces({
@@ -43,6 +50,28 @@ const body = Inter({
   weight: ["400", "500", "600"],
   variable: "--font-body",
 });
+
+const THEME_STORAGE_KEY = "slo-theme";
+const THEME_CHANGE_EVENT = "slo-theme-change";
+
+function subscribeToTheme(callback: () => void) {
+  window.addEventListener("storage", callback);
+  window.addEventListener(THEME_CHANGE_EVENT, callback);
+  return () => {
+    window.removeEventListener("storage", callback);
+    window.removeEventListener(THEME_CHANGE_EVENT, callback);
+  };
+}
+
+function getThemeSnapshot(): "dark" | "light" {
+  return window.localStorage.getItem(THEME_STORAGE_KEY) === "light"
+    ? "light"
+    : "dark";
+}
+
+function getServerThemeSnapshot(): "dark" {
+  return "dark";
+}
 
 /* ---------------------------------------------------------
    Nav model
@@ -135,16 +164,15 @@ function isPathActive(href: string, pathname: string | null) {
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const theme = useSyncExternalStore(
+    subscribeToTheme,
+    getThemeSnapshot,
+    getServerThemeSnapshot,
+  );
   const pathname = usePathname();
   const activeNavItem = NAV_SECTIONS.flatMap((section) => section.items).find(
     (item) => isPathActive(item.href, pathname),
   );
-
-  useEffect(() => {
-    const stored = window.localStorage.getItem("slo-theme");
-    if (stored === "light" || stored === "dark") setTheme(stored);
-  }, []);
 
   // Keep Bootstrap's own color-mode attribute in sync so components
   // rendered outside this shell (modals, toasts, portals) match too.
@@ -153,11 +181,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme((prev) => {
-      const next = prev === "dark" ? "light" : "dark";
-      window.localStorage.setItem("slo-theme", next);
-      return next;
-    });
+    const next = theme === "dark" ? "light" : "dark";
+    window.localStorage.setItem(THEME_STORAGE_KEY, next);
+    window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
   };
 
   return (
@@ -314,7 +340,55 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
 function ProfileMenu() {
   const [open, setOpen] = useState(false);
+  const [profileName, setProfileName] = useState("User");
   const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const supabase = createClient();
+    let cancelled = false;
+
+    const loadProfile = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (cancelled) return;
+      if (!user) {
+        setProfileName("User");
+        return;
+      }
+
+      const metadataName =
+        (typeof user.user_metadata?.full_name === "string" &&
+          user.user_metadata.full_name.trim()) ||
+        (typeof user.user_metadata?.name === "string" &&
+          user.user_metadata.name.trim());
+      const fallbackName = metadataName || user.email?.split("@")[0] || "User";
+      const { data } = await supabase
+        .from("profilec")
+        .select("full_name")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      if (!cancelled) {
+        setProfileName(data?.full_name?.trim() || fallbackName);
+      }
+    };
+
+    void loadProfile();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const initials = profileName
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase();
 
   useEffect(() => {
     if (!open) return;
@@ -343,9 +417,9 @@ function ProfileMenu() {
         aria-expanded={open}
       >
         <span className={styles.avatar} aria-hidden="true">
-          FM
+          {initials || "U"}
         </span>
-        <span className={styles.profileName}>Faith Mutiso</span>
+        <span className={styles.profileName}>{profileName}</span>
         <ChevronDown
           size={14}
           className={styles.profileChevron}
