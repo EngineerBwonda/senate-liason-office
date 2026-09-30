@@ -146,7 +146,7 @@ const stats: StatItem[] = [
     secondary: "receive and share memos from other offices",
     trendDirection: "down",
     accent: "amber",
-    href: "/pages/memo",
+    href: "/pageb/memo",
   },
   {
     id: "feed",

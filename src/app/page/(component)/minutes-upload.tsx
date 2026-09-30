@@ -19,11 +19,17 @@ const ACCEPTED_FILE_TYPES = [
 interface MinutesUploadProps {
   onClose: () => void;
   onUploaded: (id: number) => Promise<void>;
+  bucketName?: string;
+  tableName?: string;
+  recordLabel?: string;
 }
 
 export default function MinutesUpload({
   onClose,
   onUploaded,
+  bucketName = STORAGE_BUCKET,
+  tableName = "minutes",
+  recordLabel = "minutes",
 }: MinutesUploadProps) {
   const supabase = createClient();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -73,11 +79,13 @@ export default function MinutesUpload({
       } = await supabase.auth.getUser();
 
       if (authError || !user) {
-        throw new Error(authError?.message ?? "Sign in to upload minutes.");
+        throw new Error(
+          authError?.message ?? `Sign in to upload ${recordLabel}.`,
+        );
       }
       if (!user.email) {
         throw new Error(
-          "Your account needs an email address to upload minutes.",
+          `Your account needs an email address to upload ${recordLabel}.`,
         );
       }
 
@@ -86,13 +94,13 @@ export default function MinutesUpload({
         .replace(/[^a-zA-Z0-9._-]+/g, "-");
       const objectPath = `${user.id}/${crypto.randomUUID()}-${safeFileName}`;
       const { error: uploadError } = await supabase.storage
-        .from(STORAGE_BUCKET)
+        .from(bucketName)
         .upload(objectPath, file, { contentType: file.type, upsert: false });
 
       if (uploadError) throw new Error(uploadError.message);
 
       const { data: inserted, error: insertError } = await supabase
-        .from("minutes")
+        .from(tableName)
         .insert({
           title: title.trim(),
           description: description.trim(),
@@ -104,7 +112,7 @@ export default function MinutesUpload({
         .single();
 
       if (insertError) {
-        await supabase.storage.from(STORAGE_BUCKET).remove([objectPath]);
+        await supabase.storage.from(bucketName).remove([objectPath]);
         throw new Error(insertError.message);
       }
 
@@ -133,7 +141,7 @@ export default function MinutesUpload({
         className={styles.uploadModal}
         role="dialog"
         aria-modal="true"
-        aria-labelledby="minutes-upload-heading"
+        aria-labelledby="archive-upload-heading"
       >
         <header className={styles.modalHeader}>
           <div className={styles.sectionHeading}>
@@ -141,8 +149,8 @@ export default function MinutesUpload({
               <FileText size={17} />
             </span>
             <div>
-              <h2 id="minutes-upload-heading">Upload minutes</h2>
-              <p>Add a document to the minutes archive.</p>
+              <h2 id="archive-upload-heading">Upload {recordLabel}</h2>
+              <p>Add a document to the {recordLabel} archive.</p>
             </div>
           </div>
           <button
@@ -220,7 +228,9 @@ export default function MinutesUpload({
               ) : (
                 <Upload size={17} />
               )}
-              {uploading ? "Uploading..." : "Upload record"}
+              {uploading
+                ? "Uploading..."
+                : `Upload ${recordLabel === "minutes" ? "record" : recordLabel}`}
             </button>
           </footer>
         </form>

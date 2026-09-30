@@ -113,7 +113,12 @@ const NAV_SECTIONS: { label: string; items: NavItem[] }[] = [
 
       { href: "/feeds", label: "Office Feeds", icon: Rss },
       { href: "/pageb/chats", label: "Chats", icon: MessageSquare },
-      { href: "/memos", label: "Memos", icon: StickyNote },
+      {
+        href: "/pageb/memo",
+        label: "Memos",
+        icon: StickyNote,
+        attentionId: "memos",
+      },
     ],
   },
 

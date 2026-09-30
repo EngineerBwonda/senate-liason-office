@@ -11,7 +11,7 @@ export const ATTENTION_LAST_OPENED_EVENT = "attention:last-opened-updated";
 export const ATTENTION_CARDS: AttentionCardConfig[] = [
   {
     id: "memos",
-    table: "boss doc",
+    table: "memo",
     key: "memo:last-opened-at",
     singular: "Needs Attention",
     plural: "Need Attention",
