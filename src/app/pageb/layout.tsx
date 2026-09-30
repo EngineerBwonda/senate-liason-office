@@ -80,15 +80,8 @@ function getServerThemeSnapshot(): "dark" {
 const NAV_SECTIONS: { label: string; items: NavItem[] }[] = [
   {
     label: "Overview",
-    items: [{ href: "../pageb/menu", label: "Menu", icon: LayoutDashboard }],
-  },
-  {
-    label: "Records",
     items: [
-      { href: "/pageb/minutes", label: "Minutes", icon: FileText },
-      { href: "../pageb/delegation", label: "Delegation", icon: UserCheck },
-      { href: "/reports", label: "Reports", icon: BarChart3 },
-      { href: "/memos", label: "Memos", icon: StickyNote },
+      { href: "../pageb/menu", label: "Dashboard", icon: LayoutDashboard },
     ],
   },
 
@@ -103,8 +96,9 @@ const NAV_SECTIONS: { label: string; items: NavItem[] }[] = [
       },
       { href: "/reports", label: "Outgoing Correspondence", icon: Send },
 
-      { href: "/memos", label: "Office Feeds", icon: Rss },
+      { href: "/feeds", label: "Office Feeds", icon: Rss },
       { href: "/pageb/chats", label: "Chats", icon: MessageSquare },
+      { href: "/memos", label: "Memos", icon: StickyNote },
     ],
   },
 
