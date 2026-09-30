@@ -133,7 +133,7 @@ export default function RecentMessages() {
     <section className={styles.card} aria-labelledby="recent-messages-heading">
       <div className={styles.header}>
         <h2 className={styles.title} id="recent-messages-heading">
-          Recent chats
+          Live Chats
         </h2>
         <Link href="/pageb/chats" className={styles.link}>
           All chats
