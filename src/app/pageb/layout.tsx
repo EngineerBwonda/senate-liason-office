@@ -36,6 +36,10 @@ import {
 } from "lucide-react";
 import OnlineUsers from "./(component)/online-users/online-users";
 import RecentMessages from "./(component)/recent-messages/recent-messages";
+import {
+  ATTENTION_CARDS,
+  ATTENTION_LAST_OPENED_EVENT,
+} from "./(component)/attention-data";
 import { createClient } from "../supabase/client";
 import styles from "./styles.module.css";
 
@@ -88,13 +92,24 @@ const NAV_SECTIONS: { label: string; items: NavItem[] }[] = [
   {
     label: "Communications",
     items: [
-      { href: "/pageb/minutes", label: "Minutes", icon: FileText },
       {
-        href: "../pageb/delegation",
+        href: "/pageb/minutes",
+        label: "Minutes",
+        icon: FileText,
+        attentionId: "minutes",
+      },
+      {
+        href: "/pageb/incoming-correspondence",
         label: "Incoming Correspondence",
         icon: Mail,
+        attentionId: "incoming-correspondence",
       },
-      { href: "/reports", label: "Outgoing Correspondence", icon: Send },
+      {
+        href: "/pageb/outgoing-correspondence",
+        label: "Outgoing Correspondence",
+        icon: Send,
+        attentionId: "outgoing-correspondence",
+      },
 
       { href: "/feeds", label: "Office Feeds", icon: Rss },
       { href: "/pageb/chats", label: "Chats", icon: MessageSquare },
@@ -119,13 +134,21 @@ const NAV_SECTIONS: { label: string; items: NavItem[] }[] = [
   {
     label: "Record",
     items: [
-      { href: "../pageb/grid", label: "Monthly Reports", icon: BarChart3 },
       {
-        href: "../pageb/delegation",
+        href: "../pageb/monthly-report",
+        label: "Monthly Reports",
+        icon: BarChart3,
+      },
+      {
+        href: "../pageb/annual-report",
         label: "Quarterly Reports",
         icon: BarChart3,
       },
-      { href: "/reports", label: "Annual Reports", icon: BarChart3 },
+      {
+        href: "../pageb/annual-report",
+        label: "Annual Reports",
+        icon: BarChart3,
+      },
     ],
   },
   {
@@ -142,6 +165,7 @@ interface NavItem {
   href: string;
   label: string;
   icon: typeof LayoutDashboard;
+  attentionId?: string;
 }
 
 function isPathActive(href: string, pathname: string | null) {
@@ -164,9 +188,97 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     getServerThemeSnapshot,
   );
   const pathname = usePathname();
+  const [attentionCounts, setAttentionCounts] = useState<
+    Record<string, number>
+  >({});
   const activeNavItem = NAV_SECTIONS.flatMap((section) => section.items).find(
     (item) => isPathActive(item.href, pathname),
   );
+
+  useEffect(() => {
+    const item = NAV_SECTIONS.flatMap((section) => section.items).find(
+      (navItem) => navItem.attentionId && isPathActive(navItem.href, pathname),
+    );
+    const config = ATTENTION_CARDS.find(
+      (attentionCard) => attentionCard.id === item?.attentionId,
+    );
+    if (!config) return;
+
+    window.localStorage.setItem(config.key, new Date().toISOString());
+    window.dispatchEvent(
+      new CustomEvent(ATTENTION_LAST_OPENED_EVENT, {
+        detail: { key: config.key },
+      }),
+    );
+  }, [pathname]);
+
+  useEffect(() => {
+    if (pathname === "/pageb/chats") return;
+
+    const supabase = createClient();
+    let cancelled = false;
+    const attentionItems = NAV_SECTIONS.flatMap((section) => section.items)
+      .filter((item) => item.attentionId)
+      .map((item) => item.attentionId);
+    const configs = ATTENTION_CARDS.filter((config) =>
+      attentionItems.includes(config.id),
+    );
+
+    const loadCount = async (config: (typeof configs)[number]) => {
+      const lastOpenedAt = window.localStorage.getItem(config.key);
+      let query = supabase
+        .from(config.table)
+        .select("id", { count: "exact", head: true });
+
+      if (lastOpenedAt) query = query.gt("created_at", lastOpenedAt);
+
+      const { count, error } = await query;
+      if (cancelled) return;
+      if (error) {
+        console.error(`Error loading attention count for ${config.id}:`, error);
+        return;
+      }
+
+      setAttentionCounts((current) => ({
+        ...current,
+        [config.id]: count ?? 0,
+      }));
+    };
+
+    configs.forEach((config) => void loadCount(config));
+
+    const channels = configs.map((config) =>
+      supabase
+        .channel(`${config.id}-sidebar-attention-changes`)
+        .on(
+          "postgres_changes",
+          { event: "INSERT", schema: "public", table: config.table },
+          () => void loadCount(config),
+        )
+        .subscribe(),
+    );
+
+    const refreshForKey = (key: string | null | undefined) => {
+      if (!key) return;
+      const config = configs.find((item) => item.key === key);
+      if (config) void loadCount(config);
+    };
+    const onStorage = (event: StorageEvent) => refreshForKey(event.key);
+    const onLastOpened = (event: Event) => {
+      const customEvent = event as CustomEvent<{ key?: string }>;
+      refreshForKey(customEvent.detail?.key);
+    };
+
+    window.addEventListener("storage", onStorage);
+    window.addEventListener(ATTENTION_LAST_OPENED_EVENT, onLastOpened);
+
+    return () => {
+      cancelled = true;
+      channels.forEach((channel) => void supabase.removeChannel(channel));
+      window.removeEventListener("storage", onStorage);
+      window.removeEventListener(ATTENTION_LAST_OPENED_EVENT, onLastOpened);
+    };
+  }, [pathname]);
 
   // Keep Bootstrap's own color-mode attribute in sync so components
   // rendered outside this shell (modals, toasts, portals) match too.
@@ -179,6 +291,18 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     window.localStorage.setItem(THEME_STORAGE_KEY, next);
     window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
   };
+
+  if (pathname === "/pageb/chats") {
+    return (
+      <div
+        className={`${styles.chatStandalone} ${display.variable} ${body.variable}`}
+        data-bs-theme={theme}
+        suppressHydrationWarning
+      >
+        {children}
+      </div>
+    );
+  }
 
   return (
     <div
@@ -218,12 +342,24 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
               {section.items.map((item) => {
                 const active = item === activeNavItem;
                 const Icon = item.icon;
+                const attentionCount = item.attentionId
+                  ? (attentionCounts[item.attentionId] ?? 0)
+                  : 0;
                 return (
                   <Link
                     key={`${item.href}-${item.label}`}
                     href={item.href}
                     className={`${styles.navLink} ${active ? styles.navLinkActive : ""}`}
-                    title={sidebarOpen ? undefined : item.label}
+                    title={
+                      sidebarOpen
+                        ? undefined
+                        : `${item.label}${attentionCount > 0 ? ` (${attentionCount} new)` : ""}`
+                    }
+                    aria-label={
+                      attentionCount > 0
+                        ? `${item.label}, ${attentionCount} new documents`
+                        : undefined
+                    }
                     aria-current={active ? "page" : undefined}
                   >
                     <Icon
@@ -232,6 +368,11 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                       aria-hidden="true"
                     />
                     {sidebarOpen && <span>{item.label}</span>}
+                    {attentionCount > 0 && (
+                      <span className={styles.navBadge} aria-hidden="true">
+                        {attentionCount > 99 ? "99+" : attentionCount}
+                      </span>
+                    )}
                   </Link>
                 );
               })}

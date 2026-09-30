@@ -25,6 +25,11 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { createClient } from "../../supabase/client";
+import {
+  ATTENTION_CARDS,
+  ATTENTION_LAST_OPENED_EVENT,
+  type AttentionCardConfig,
+} from "../(component)/attention-data";
 import styles from "./styles.module.css";
 
 type Accent =
@@ -60,7 +65,7 @@ const stats: StatItem[] = [
     secondary: "receive and share minutes from other offices",
     trendDirection: "up",
     accent: "blue",
-    href: "/pages/minutes",
+    href: "../../pageb/minutes",
   },
   {
     id: "incoming-correspondence",
@@ -70,7 +75,7 @@ const stats: StatItem[] = [
     secondary: "receive correspondence from other offices",
     trendDirection: "neutral",
     accent: "green",
-    href: "/pages/incoming-correspondence",
+    href: "/pageb/incoming-correspondence",
   },
   {
     id: "outgoing-correspondence",
@@ -80,7 +85,7 @@ const stats: StatItem[] = [
     secondary: "send correspondence to other offices",
     trendDirection: "neutral",
     accent: "purple",
-    href: "/pages/outgoing-correspondence",
+    href: "/pageb/outgoing-correspondence",
     progress: 62,
   },
   {
@@ -91,7 +96,7 @@ const stats: StatItem[] = [
     secondary: "Next at 2:00 PM",
     trendDirection: "neutral",
     accent: "orange",
-    href: "/pages/monthly-reports",
+    href: "/pageb/monthly-report",
   },
   {
     id: "annual-reports",
@@ -101,7 +106,7 @@ const stats: StatItem[] = [
     secondary: "Next at 2:00 PM",
     trendDirection: "neutral",
     accent: "orange",
-    href: "/pages/annual-reports",
+    href: "/pageb/annual-report",
   },
   {
     id: "quarterly-reports",
@@ -111,7 +116,7 @@ const stats: StatItem[] = [
     secondary: "Next at 2:00 PM",
     trendDirection: "neutral",
     accent: "orange",
-    href: "/pages/quarterly-reports",
+    href: "/pageb/quarterly-report",
   },
   {
     id: "chats",
@@ -121,7 +126,7 @@ const stats: StatItem[] = [
     secondary: "Team conversation and active threads",
     trendDirection: "up",
     accent: "cyan",
-    href: "../firebase-chat/login",
+    href: "/pageb/recent-messages",
   },
   {
     id: "calendar",
@@ -182,74 +187,6 @@ const item: Variants = {
 };
 
 const MotionLink = motion.create(Link);
-const MEMO_LAST_OPENED_KEY = "memo:last-opened-at";
-const INCOMING_LAST_OPENED_KEY = "incoming-correspondence:last-opened-at";
-const OUTGOING_LAST_OPENED_KEY = "outgoing-correspondence:last-opened-at";
-const MONTHLY_LAST_OPENED_KEY = "monthly-reports:last-opened-at";
-const ANNUAL_LAST_OPENED_KEY = "annual-reports:last-opened-at";
-const QUARTERLY_LAST_OPENED_KEY = "quarterly-reports:last-opened-at";
-const MINUTES_LAST_OPENED_KEY = "minutes:last-opened-at";
-const ATTENTION_LAST_OPENED_EVENT = "attention:last-opened-updated";
-
-type AttentionCardConfig = {
-  id: string;
-  table: string;
-  key: string;
-  singular: string;
-  plural: string;
-};
-
-const ATTENTION_CARDS: AttentionCardConfig[] = [
-  {
-    id: "memos",
-    table: "boss doc",
-    key: MEMO_LAST_OPENED_KEY,
-    singular: "Needs Attention",
-    plural: "Need Attention",
-  },
-  {
-    id: "incoming-correspondence",
-    table: "incoming_correspondence",
-    key: INCOMING_LAST_OPENED_KEY,
-    singular: "New Correspondence",
-    plural: "New Correspondence",
-  },
-  {
-    id: "outgoing-correspondence",
-    table: "outgoing_correspondence",
-    key: OUTGOING_LAST_OPENED_KEY,
-    singular: "New Outgoing",
-    plural: "New Outgoing",
-  },
-  {
-    id: "monthly-reports",
-    table: "monthly_reports",
-    key: MONTHLY_LAST_OPENED_KEY,
-    singular: "New Monthly Report",
-    plural: "New Monthly Reports",
-  },
-  {
-    id: "annual-reports",
-    table: "annual_reports",
-    key: ANNUAL_LAST_OPENED_KEY,
-    singular: "New Annual Report",
-    plural: "New Annual Reports",
-  },
-  {
-    id: "quarterly-reports",
-    table: "quarterlyb_reports",
-    key: QUARTERLY_LAST_OPENED_KEY,
-    singular: "Needs Attention",
-    plural: "Need Attention",
-  },
-  {
-    id: "minutes",
-    table: "minutes",
-    key: MINUTES_LAST_OPENED_KEY,
-    singular: "New Minute",
-    plural: "New Minutes",
-  },
-];
 
 function StatValue({
   value,

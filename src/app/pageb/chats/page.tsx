@@ -9,8 +9,10 @@ import {
   type FormEvent,
 } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 import {
+  ArrowLeft,
   FileText,
   Check,
   CheckCheck,
@@ -776,7 +778,15 @@ export default function ChatsPage() {
           <p className={styles.eyebrow}>Communications / Private chats</p>
           <h1 className={styles.title}>Messages</h1>
         </div>
-        <span className={styles.staffCount}>{staff.length} approved staff</span>
+        <div className={styles.headerActions}>
+          <span className={styles.staffCount}>
+            {staff.length} approved staff
+          </span>
+          <Link className={styles.backToMenu} href="/pageb/menu">
+            <ArrowLeft size={16} aria-hidden="true" />
+            Back to menu
+          </Link>
+        </div>
       </header>
 
       {error && (
@@ -785,7 +795,9 @@ export default function ChatsPage() {
         </p>
       )}
 
-      <div className={styles.workspace}>
+      <div
+        className={`${styles.workspace} ${activeId ? styles.workspaceThreadOpen : ""}`}
+      >
         <aside
           className={styles.conversationPanel}
           aria-label="Chats and staff"
@@ -945,6 +957,19 @@ export default function ChatsPage() {
           {activeId ? (
             <>
               <header className={styles.threadHeader}>
+                <button
+                  className={styles.mobileBackButton}
+                  type="button"
+                  onClick={() => {
+                    setMessages([]);
+                    setActiveId("");
+                    setThreadLoading(true);
+                    router.replace("/pageb/chats", { scroll: false });
+                  }}
+                  aria-label="Back to conversations"
+                >
+                  <ArrowLeft size={18} aria-hidden="true" />
+                </button>
                 <span className={styles.avatar} aria-hidden="true">
                   {activeName
                     .split(" ")
