@@ -2,6 +2,8 @@
 
 # dependencies
 /node_modules
+/collaboration-server/node_modules
+/collaboration-server/dist
 /.pnp
 .pnp.*
 .yarn/*
