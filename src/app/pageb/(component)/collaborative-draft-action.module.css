@@ -1,0 +1,51 @@
+.wrapper {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  margin-right: 0.35rem;
+}
+
+.button {
+  display: inline-flex;
+  min-height: 32px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid rgba(59, 130, 196, 0.42);
+  border-radius: 5px;
+  color: var(--blue-500, #3b82c4);
+  background: rgba(59, 130, 196, 0.08);
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button:hover:not(:disabled) {
+  border-color: var(--blue-500, #3b82c4);
+  background: rgba(59, 130, 196, 0.16);
+}
+
+.button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.error {
+  max-width: 190px;
+  color: #e2665a;
+  font-size: 0.62rem;
+  white-space: normal;
+}
+
+.spinner {
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

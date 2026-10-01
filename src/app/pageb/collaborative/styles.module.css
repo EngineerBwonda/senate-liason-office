@@ -1,0 +1,254 @@
+.page {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 1.2rem;
+  color: var(--ivory-50);
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.35rem;
+  color: var(--gold-400);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.subtitle {
+  margin: 0.4rem 0 0;
+  color: var(--slate-400);
+  font-size: 0.82rem;
+}
+
+.createForm {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(150px, 220px) auto;
+  align-items: end;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  background: var(--glass-bg);
+}
+
+.titleField,
+.typeField {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: var(--slate-400);
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.titleField input,
+.typeField select {
+  width: 100%;
+  min-height: 40px;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 6px;
+  outline: none;
+  color: var(--ivory-50);
+  background: var(--navy-950);
+  font: inherit;
+  font-size: 0.8rem;
+}
+
+.titleField input:focus,
+.typeField select:focus {
+  border-color: var(--gold-400);
+}
+
+.createButton {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid var(--gold-500);
+  border-radius: 6px;
+  color: #171717;
+  background: var(--gold-500);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.createButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.spinner {
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error {
+  margin: 0;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid rgba(226, 102, 90, 0.4);
+  border-radius: 6px;
+  color: var(--red-500);
+  background: rgba(226, 102, 90, 0.08);
+  font-size: 0.78rem;
+}
+
+.documentSection {
+  min-width: 0;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.55rem;
+}
+
+.sectionHeader h2 {
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+.sectionHeader > span,
+.documentLink time {
+  color: var(--slate-400);
+  font-size: 0.7rem;
+}
+
+.documentList {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  background: var(--glass-bg);
+  list-style: none;
+}
+
+.documentList li + li {
+  border-top: 1px solid var(--glass-border);
+}
+
+.documentLink {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.8rem 0.9rem;
+}
+
+.documentLink:hover {
+  background: rgba(201, 169, 97, 0.07);
+}
+
+.documentIcon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  place-items: center;
+  border-radius: 7px;
+  color: var(--gold-400);
+  background: rgba(201, 169, 97, 0.12);
+}
+
+.documentCopy {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.documentCopy strong,
+.documentCopy > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.documentCopy strong {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.documentCopy > span {
+  color: var(--slate-400);
+  font-size: 0.7rem;
+}
+
+.status {
+  padding: 0.25rem 0.45rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  color: var(--slate-400);
+  font-size: 0.64rem;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.status[data-status="in_review"] {
+  color: var(--blue-500);
+}
+
+.status[data-status="approved"] {
+  color: #54bd84;
+}
+
+.status[data-status="archived"] {
+  color: var(--red-500);
+}
+
+.emptyState {
+  display: flex;
+  min-height: 120px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 1rem;
+  border: 1px dashed var(--glass-border);
+  border-radius: 8px;
+  color: var(--slate-400);
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  .createForm {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .documentLink {
+    flex-wrap: wrap;
+  }
+
+  .documentLink time {
+    margin-left: auto;
+  }
+}
