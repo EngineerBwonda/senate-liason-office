@@ -9,7 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@hocuspocus/server": "^4.7.0",
+=======
+>>>>>>> parent of 2b99ade (login page hydration issue fixed)
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.116.0",
     "framer-motion": "^13.4.1",
