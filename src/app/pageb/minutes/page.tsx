@@ -15,7 +15,6 @@ import {
   X,
 } from "lucide-react";
 import MinutesUpload from "../../page/(component)/minutes-upload";
-import CollaborativeDraftAction from "../(component)/collaborative-draft-action";
 import { createClient } from "../../supabase/client";
 import styles from "./styles.module.css";
 
@@ -456,11 +455,6 @@ export default function Page() {
                         </button>
                       </td>
                       <td className={styles.actionsCell}>
-                        <CollaborativeDraftAction
-                          documentType="minutes"
-                          sourceId={record.id}
-                          title={record.title}
-                        />
                         {record.user_id === currentUserId && (
                           <label className={styles.rowAction}>
                             <RefreshCw size={14} aria-hidden="true" />

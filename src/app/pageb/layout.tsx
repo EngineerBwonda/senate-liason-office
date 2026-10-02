@@ -33,7 +33,6 @@ import {
   User,
   LogOut,
   Send,
-  FileEdit,
 } from "lucide-react";
 import OnlineUsers from "./(component)/online-users/online-users";
 import RecentMessages from "./(component)/recent-messages/recent-messages";
@@ -140,11 +139,6 @@ const NAV_SECTIONS: { label: string; items: NavItem[] }[] = [
   {
     label: "Record",
     items: [
-      {
-        href: "/pageb/collaborative",
-        label: "Collaborative Drafts",
-        icon: FileEdit,
-      },
       {
         href: "../pageb/monthly-report",
         label: "Monthly Reports",

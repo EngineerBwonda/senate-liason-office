@@ -276,7 +276,7 @@ export default function LoginForm() {
               <span className={styles.dividerText}>Or continue with</span>
             </div>
 
-            {/* <div className={styles.socialButtons}>
+            <div className={styles.socialButtons}>
               <button
                 type="button"
                 className={styles.socialButton}
@@ -291,7 +291,7 @@ export default function LoginForm() {
               >
                 Microsoft
               </button>
-            </div> */}
+            </div>
           </form>
 
           <p className={styles.authFooter}>
